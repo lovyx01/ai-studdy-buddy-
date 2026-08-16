@@ -1,0 +1,13 @@
+# dependencies
+node_modules/
+
+# environment / secrets - NEVER commit these
+.env
+
+# runtime data
+server/data/
+server/uploads/
+
+# logs & os
+*.log
+.DS_Store
