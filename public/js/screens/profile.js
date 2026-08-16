@@ -37,7 +37,17 @@ export default async function render(container, params, app) {
       </div>
     </div>`;
 
-  // Load usage / plan.
+  // Attach static handlers immediately so taps always work, even if the
+  // subscription API is slow or unreachable.
+  container.querySelector('#explain').onclick = () => app.navigate('chat');
+  container.querySelector('#pro').onclick = () => app.navigate('pro');
+  container.querySelector('#logout').onclick = () => {
+    setToken(null); setUser(null);
+    toast('Logged out. See you soon! 👋', 'info');
+    app.navigate('login');
+  };
+
+  // Load usage / plan (best-effort, async).
   try {
     const sub = await api('/subscription');
     const planName = (sub.plan === 'pro' ? 'PRO' : 'FREE');
@@ -54,13 +64,5 @@ export default async function render(container, params, app) {
         <button class="btn btn-primary mt16" id="upgrade">Upgrade to Pro</button>`;
       usage.querySelector('#upgrade').onclick = () => app.navigate('pro');
     }
-  } catch (e) { /* ignore */ }
-
-  container.querySelector('#explain').onclick = () => app.navigate('chat');
-  container.querySelector('#pro').onclick = () => app.navigate('pro');
-  container.querySelector('#logout').onclick = () => {
-    setToken(null); setUser(null);
-    toast('Logged out. See you soon! 👋', 'info');
-    app.navigate('login');
-  };
+  } catch (e) { /* keep static profile */ }
 }

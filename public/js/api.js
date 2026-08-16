@@ -44,7 +44,8 @@ export async function api(path, { method = 'GET', body, params } = {}) {
 
   let res;
   try {
-    res = await fetch(url, { method, headers, body });
+    // 25s timeout so a slow/hung request can never block a screen forever.
+    res = await fetch(url, { method, headers, body, signal: AbortSignal.timeout(25000) });
   } catch (e) {
     throw new Error('NETWORK');
   }
