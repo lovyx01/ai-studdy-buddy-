@@ -13,6 +13,9 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
+      # Pin Node to 22 LTS so better-sqlite3 compiles (Node 26 breaks it).
+      - key: NODE_VERSION
+        value: "22"
       # Your OpenAI key. Render hides this value once saved.
       # Paste your key (the one you saved as STUDORA_OPENAI_KEY) here.
       - key: OPENAI_API_KEY
